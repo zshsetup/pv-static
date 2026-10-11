@@ -108,7 +108,10 @@ echo ">>> pv"
   export CC="$WORK/bin/cc"
   ./generate.sh >/dev/null
   # pv 1.7 uses ioctl and splice without declaring them, which current compilers reject
-  ./configure --disable-nls CFLAGS="-Os -D_GNU_SOURCE -include sys/ioctl.h" LDFLAGS="$LDSTATIC -s" >/dev/null
+  CFLAGS="-Os -D_GNU_SOURCE -include sys/ioctl.h"
+  # macOS has no fdatasync, which pv calls without a fallback
+  [ "$OS" = Darwin ] && CFLAGS="$CFLAGS -Dfdatasync=fsync"
+  ./configure --disable-nls CFLAGS="$CFLAGS" LDFLAGS="$LDSTATIC -s" >/dev/null
   "$MAKE" -j"$JOBS" pv
   rm -rf "$DIST"
   mkdir -p "$DIST/bin" "$DIST/share/man/man1"
