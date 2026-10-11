@@ -1,0 +1,9 @@
+# Changes here will be overwritten by Copier
+_commit: e730ed7
+_src_path: gh:audivir/copier-template
+description: Static build of pv, the pipe viewer
+github_org: zshsetup
+project_name: pv-static
+project_slug: pv_static
+project_type: shell
+publishable: false
