@@ -40,8 +40,8 @@ out="$(head -c 100000 /dev/zero | "$BIN" -q | wc -c | tr -d ' ')"
 [ "$out" = 100000 ] || fail "pv passed $out bytes of 100000"
 pass "passes data through"
 
-out="$(head -c 4096 /dev/zero | "$BIN" -b -f 2>&1 >/dev/null | tr '\r' '\n' | tail -n 1)"
-echo "$out" | grep -q '4.00KiB' || fail "byte counter: $out"
+out="$(head -c 4096 /dev/zero | "$BIN" -n -s 4096 2>&1 >/dev/null | tail -n 1)"
+[ "$out" = 100 ] || fail "numeric progress: $out"
 pass "shows the progress"
 
 if [ "$(uname -s)" = Linux ] && ! LC_ALL=C grep -a -q 'ld-musl' "$BIN"; then
