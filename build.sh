@@ -101,12 +101,12 @@ prepare pv
 echo ">>> pv"
 (
   cd pv
-  ./generate.sh >/dev/null
   # the dependency scripts of pv take the compiler as a single word, so the compiler is a wrapper
   mkdir -p "$WORK/bin"
   printf '#!/bin/sh\nexec %s "$@"\n' "$CC" >"$WORK/bin/cc"
   chmod +x "$WORK/bin/cc"
   export CC="$WORK/bin/cc"
+  ./generate.sh >/dev/null
   # pv 1.7 uses ioctl and splice without declaring them, which current compilers reject
   ./configure --disable-nls CFLAGS="-Os -D_GNU_SOURCE -include sys/ioctl.h" LDFLAGS="$LDSTATIC -s" >/dev/null
   "$MAKE" -j"$JOBS" pv
